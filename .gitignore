@@ -4,3 +4,5 @@
 *.jar
 *.war
 *.ear
+/demo/ClientCloudBees/target/
+/demo/ClientCloudBees/nbactions.xml
