@@ -6,6 +6,8 @@ import com.cloudbees.api.BeesClient;
 import com.cloudbees.api.DatabaseInfo;
 import com.cloudbees.api.DatabaseListResponse;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
@@ -19,13 +21,14 @@ public class DemoDevoxx {
 
     public static void main(String[] args) throws CmdLineException, Exception {
         
+        
         // Get api Key / Secret / Url from command line
         CmdLineOptions cmdArgs = new CmdLineOptions();
         CmdLineParser parser = new CmdLineParser(cmdArgs);
         parser.parseArgument(args);
 
         init(cmdArgs);
-        
+
         Scanner scan = new Scanner(System.in);
         boolean end = false;
         
@@ -57,6 +60,7 @@ public class DemoDevoxx {
     private static void init(CmdLineOptions cmdArgs) {
         // Cloudbees client
         client = new BeesClient(cmdArgs.apiUrl, cmdArgs.apiKey, cmdArgs.apiSecret, "xml", "1.0");
+        client.setVerbose(false);
     }
     
     private static void printMenu() {
