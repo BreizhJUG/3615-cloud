@@ -5,6 +5,8 @@ import com.cloudbees.api.ApplicationListResponse;
 import com.cloudbees.api.BeesClient;
 import com.cloudbees.api.DatabaseInfo;
 import com.cloudbees.api.DatabaseListResponse;
+import com.google.common.base.Strings;
+import java.util.Formatter;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -40,9 +42,11 @@ public class DemoDevoxx {
             switch (cmd) {
                 case "1":
                     printListApplication();
+                    scan.next();
                     break;
                 case "2":
                     printListDatabase();
+                    scan.next();
                     break;
                 case "Q":
                 case "q":
@@ -74,9 +78,13 @@ public class DemoDevoxx {
 
     private static void printListApplication() throws Exception {
         ApplicationListResponse appList = client.applicationList();
+        Formatter formatter = new Formatter(System.out);
+        System.out.println("---------------------------------------------------------------------");
         for (ApplicationInfo appinfo : appList.getApplications()) {
-            System.out.println(appinfo.getTitle() + " - " + appinfo.getStatus() + " - Id : " + appinfo.getId());
+            formatter.format("| %1$20s | %2$20s | %3$20s |\n", appinfo.getId(), appinfo.getTitle(), appinfo.getStatus());
         }
+        System.out.println("---------------------------------------------------------------------");
+
     }
 
     private static void printListDatabase() throws Exception {
