@@ -5,11 +5,8 @@ import com.cloudbees.api.ApplicationListResponse;
 import com.cloudbees.api.BeesClient;
 import com.cloudbees.api.DatabaseInfo;
 import com.cloudbees.api.DatabaseListResponse;
-import com.google.common.base.Strings;
 import java.util.Formatter;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
@@ -81,7 +78,7 @@ public class DemoDevoxx {
         Formatter formatter = new Formatter(System.out);
         System.out.println("---------------------------------------------------------------------");
         for (ApplicationInfo appinfo : appList.getApplications()) {
-            formatter.format("| %1$20s | %2$20s | %3$20s |\n", appinfo.getId(), appinfo.getTitle(), appinfo.getStatus());
+            formatter.format("| %1$25s | %2$25s | %3$15s |\n", appinfo.getId(), appinfo.getTitle(), appinfo.getStatus());
         }
         System.out.println("---------------------------------------------------------------------");
 
