@@ -6,3 +6,4 @@
 *.ear
 /demo/ClientCloudBees/target/
 /demo/ClientCloudBees/nbactions.xml
+*.nxj
