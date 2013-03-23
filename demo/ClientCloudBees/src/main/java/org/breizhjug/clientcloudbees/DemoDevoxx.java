@@ -2,6 +2,7 @@ package org.breizhjug.clientcloudbees;
 
 import com.cloudbees.api.ApplicationInfo;
 import com.cloudbees.api.ApplicationListResponse;
+import com.cloudbees.api.ApplicationStatusResponse;
 import com.cloudbees.api.BeesClient;
 import com.cloudbees.api.DatabaseInfo;
 import com.cloudbees.api.DatabaseListResponse;
@@ -17,6 +18,8 @@ import org.kohsuke.args4j.CmdLineParser;
 public class DemoDevoxx {
 
     private static BeesClient client;
+    private static ApplicationListResponse appList;
+    private static DatabaseListResponse dbList;
 
     public static void main(String[] args) throws CmdLineException, Exception {
         
@@ -39,12 +42,24 @@ public class DemoDevoxx {
             switch (cmd) {
                 case "1":
                     printListApplication();
-                    scan.next();
                     break;
                 case "2":
                     printListDatabase();
-                    scan.next();
                     break;
+                case "3":
+                    printListApplication();
+                    System.out.println("Which application do you want to stop ?");
+                    String n = scan.next();
+                    stopApplication(n);
+                    printListApplication();
+                    break;
+                case "4":
+                    printListApplication();
+                    System.out.println("Which application do you want to start ?");
+                    String m = scan.next();
+                    startApplication(m);
+                    printListApplication();
+                    break;                    
                 case "Q":
                 case "q":
                     end = true;
@@ -61,6 +76,7 @@ public class DemoDevoxx {
     private static void init(CmdLineOptions cmdArgs) {
         // Cloudbees client
         client = new BeesClient(cmdArgs.apiUrl, cmdArgs.apiKey, cmdArgs.apiSecret, "xml", "1.0");
+        // Trace desactivation
         client.setVerbose(false);
     }
     
@@ -70,24 +86,49 @@ public class DemoDevoxx {
         System.out.println("-----------------------");
         System.out.println("1- List applications");
         System.out.println("2- List databases");
+        System.out.println("3- Stop application");
+        System.out.println("4- Start application");
         System.out.println("Q- Quit");
     }
 
     private static void printListApplication() throws Exception {
-        ApplicationListResponse appList = client.applicationList();
+        appList = client.applicationList();
         Formatter formatter = new Formatter(System.out);
-        System.out.println("---------------------------------------------------------------------");
-        for (ApplicationInfo appinfo : appList.getApplications()) {
-            formatter.format("| %1$25s | %2$25s | %3$15s |\n", appinfo.getId(), appinfo.getTitle(), appinfo.getStatus());
+        System.out.println("-------------------------------------------------------------------------------");
+        System.out.println("| # |       Application ID      |      Application name     |      Status     |");
+        System.out.println("-------------------------------------------------------------------------------");
+        for (int i = 0; i < appList.getApplications().size(); i++) {
+            ApplicationInfo appinfo = appList.getApplications().get(i);
+            formatter.format("| %1$1s | %2$25s | %3$25s | %4$15s |\n", i, appinfo.getId(), appinfo.getTitle(), appinfo.getStatus());
         }
-        System.out.println("---------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------");
 
     }
 
     private static void printListDatabase() throws Exception {
-        DatabaseListResponse dbList = client.databaseList();
+        dbList = client.databaseList();
+        Formatter formatter = new Formatter(System.out);
+        System.out.println("----------------------------------------------------------------------");
+        System.out.println("|       Database name       |      Status     |       Username       |");
+        System.out.println("----------------------------------------------------------------------");
         for (DatabaseInfo dbInfo : dbList.getDatabases()) {
-            System.out.println(dbInfo.getName() + " - " + dbInfo.getStatus() + " - " + dbInfo.getUsername());
+            formatter.format("| %1$25s | %2$15s | %3$20s |\n", dbInfo.getName(), dbInfo.getStatus(), dbInfo.getUsername());
         }
+        System.out.println("----------------------------------------------------------------------");
     }
+    
+    private static void stopApplication(String n) throws Exception {
+        System.out.println("Stopping application : " + appList.getApplications().get(Integer.valueOf(n)).getTitle() + " ...");
+        String appId = appList.getApplications().get(Integer.valueOf(n)).getId();
+        ApplicationStatusResponse resp =  client.applicationStop(appId);
+        System.out.println("Stop status : " + resp.getStatus());
+    }
+
+    private static void startApplication(String n) throws Exception {
+        System.out.println("Starting application : " + appList.getApplications().get(Integer.valueOf(n)).getTitle() + " ...");
+        String appId = appList.getApplications().get(Integer.valueOf(n)).getId();
+        ApplicationStatusResponse resp =  client.applicationStart(appId);
+        System.out.println("Start status : " + resp.getStatus());
+    }
+
 }
