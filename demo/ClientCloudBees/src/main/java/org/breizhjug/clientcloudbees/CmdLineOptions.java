@@ -17,4 +17,7 @@ public class CmdLineOptions {
     @Option(name = "-url", usage = "CloudBees URL endpoint")
     public String apiUrl = "https://api.cloudbees.com/api";
     
+    @Option(name = "-jenkinsurl", usage = "Jenkins XML API URL")
+    public String jenkinsUrl = "https://breizhjug.ci.cloudbees.com/api/xml";
+    
 }
