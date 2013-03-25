@@ -1,0 +1,6 @@
+<!--
+  This view is used to render the installed plugins page.
+-->
+<div>
+  Send notification to a Légo Mindstorm NXT robot running LeJos
+</div>
