@@ -101,6 +101,7 @@ public class DemoDevoxx {
     }
 
     private static void printListApplication() throws Exception {
+        System.out.println("Querying Cloudbess PaaS ...");
         appList = client.applicationList();
         Formatter formatter = new Formatter(System.out);
         System.out.println("-------------------------------------------------------------------------------");
@@ -115,6 +116,7 @@ public class DemoDevoxx {
     }
 
     private static void printListDatabase() throws Exception {
+        System.out.println("Querying Cloudbess PaaS ...");
         dbList = client.databaseList();
         Formatter formatter = new Formatter(System.out);
         System.out.println("----------------------------------------------------------------------");
@@ -141,6 +143,7 @@ public class DemoDevoxx {
     }
 
     private static void printListJob(String jenkinsUrl) throws Exception {
+        System.out.println("Querying Jenkins REST API ...");
         URL url = new URL(jenkinsUrl);
         Document dom = new SAXReader().read(url);
         
